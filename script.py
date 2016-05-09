@@ -24,11 +24,11 @@ distance = 600.0
 
 # Variables globales
 
-arcpy.env.workspace = r"C:\USERS\NATALIA\DESKTOP"
-testlinea = r"C:\USERS\NATALIA\DESKTOP\temp\perpendiculares.shp"
-testpuntos = r"C:\USERS\NATALIA\DESKTOP\temp\testpuntos.shp"
-unipuntos = testpuntos = r"C:\USERS\NATALIA\DESKTOP\temp\unipuntos.shp"
-salidapuntos = r"C:\USERS\NATALIA\DESKTOP\temp\puntos_intersect.shp"
+arcpy.env.workspace = r"C:\..."
+testlinea = r"C:\...\perpendiculares.shp"
+testpuntos = r"C:\...\testpuntos.shp"
+unipuntos = testpuntos = r"C:\...\unipuntos.shp"
+salidapuntos = r"C:\...\puntos_intersect.shp"
 
 if arcpy.Exists(testlinea):
 	arcpy.Delete_management(testlinea)
@@ -161,10 +161,9 @@ def filtrarResultados(mapa):
 	temp = {}
 	temp = mapa
 	for key in list(mapa):
-		if len(temp[key]) < 2:
+		if len(temp[key]) < 2 or len(temp[key]) > 2:
 			del temp[key]
-		elif len(temp[key]) > 2:
-			del temp[key][1]
+		
 	return temp
 
 def calcularDistancias(x1,y1,x2,y2):
@@ -219,10 +218,10 @@ except:
 
 
 arcpy.MultipartToSinglepart_management(salidapuntos,unipuntos)
-arcpy.Delete_management(testlinea)
+# arcpy.Delete_management(testlinea)
 arcpy.Delete_management(salidapuntos)
 conjunto = intersectar(unipuntos)
 fin = filtrarResultados(conjunto)
 salida = crearLineas(fin)
-arcpy.Delete_management(testpuntos)
+# arcpy.Delete_management(testpuntos)
 del gp
