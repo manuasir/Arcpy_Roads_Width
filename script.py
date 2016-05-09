@@ -13,10 +13,10 @@ gp = arcgisscripting.create()
 # Entradas:
 # Modificar rutas
 # tempo: ruta de capa de polígonos (POLYGON)
-#inputlines: ruta de capa de líneas (POLYLINE)
+# inputlines: ruta de capa de líneas (POLYLINE)
 
-tempo = r"C:\USERS\NATALIA\DESKTOP\Prueba\tempo.shp"
-inputlines = r"C:\USERS\NATALIA\DESKTOP\prueba\eje_prueba_spliteado.shp"
+tempo = ''
+inputlines = ''
 
 # Modificar distancia de lineas perpendiculares
 
