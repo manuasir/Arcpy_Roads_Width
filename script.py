@@ -10,12 +10,13 @@ import sys, string, os, arcgisscripting, cmath
 arcpy.env.overwriteOutput = True
 gp = arcgisscripting.create()
 
-# Entradas
+# Entradas:
+# Modificar rutas
+# tempo: ruta de capa de polígonos (POLYGON)
+#inputlines: ruta de capa de líneas (POLYLINE)
+
 tempo = r"C:\USERS\NATALIA\DESKTOP\Prueba\tempo.shp"
 inputlines = r"C:\USERS\NATALIA\DESKTOP\prueba\eje_prueba_spliteado.shp"
-
-#tempo = r"C:\USERS\NATALIA\DESKTOP\Prueba\MANZANAS_PARALELAS_dissolve.shp"
-#inputlines = r"C:\USERS\NATALIA\DESKTOP\prueba\And_ejes_e00.shp"
 
 # Modificar distancia de lineas perpendiculares
 
@@ -194,13 +195,13 @@ def crearLineas(struct):
 		
 		array.add(point)   
 		distancia = calcularDistancias(struct[key][0][0],struct[key][0][1],struct[key][1][0],struct[key][1][1])
-		# Create a Polyline object based on the array of points
+		# Crear objeto polilinea a partir de un array
 		polyline = arcpy.Polyline(array)
-		# Clear the array for future use
+		# Limpiar array
 		array.removeAll()
-		# Append to the list of Polyline objects
+		# Añadir a la lista de figuras
 		featureList.append(polyline)
-		# Insert the feature
+		# Insertar propiedades
 		feat.shape = polyline
 		feat.setValue('Id',key)
 		feat.setValue('Distancia',distancia)
