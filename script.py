@@ -20,7 +20,7 @@ inputlines = ''
 
 # Modificar distancia de lineas perpendiculares
 
-distance = 30.0
+distance = 600.0
 
 # Variables globales
 
@@ -105,21 +105,32 @@ def crearPerpendicular(feat):
 				x1 = midx + distance
 				x2 = midx - distance
 				
-	
 	coords = [(x1, y1), (x2, y2)]
 	return coords
 	
 def intersectar(puntos):
 
 	fields = ['FID_perpen','SHAPE@XY']
+	campos = ['FID','SHAPE@XY', 'SHAPE@']
 	salida = {}
+	centros = {}
 	salidacopy = {}
 	try:
 		cursorpuntos = arcpy.da.SearchCursor(puntos,fields)
+		cursorperpendiculares = arcpy.da.SearchCursor(inputlines,campos)
 		tupla = cursorpuntos.next()
 	except:
 		print "Error.Pruebe aumentando el rango."
 		raise sys.exit("Error")
+	
+	for linea in cursorperpendiculares:
+		indice = linea[0]
+		x = linea[2]
+		fpx = x.positionAlongLine(0.5,True).firstPoint.X
+		fpy = x.positionAlongLine(0.5,True).firstPoint.Y
+		
+		centros[indice] = [fpx,fpy]
+		# print centros
 	
 	for tupla in cursorpuntos:
 		listatemp = []
@@ -129,13 +140,22 @@ def intersectar(puntos):
 		if indice in salida:
 			listatemp=salida[indice]
 			listatemp.append(valor)
-			salida[indice] = listatemp
-			
+			salida[indice] = listatemp	
 		else:
 			# salida[indice] = valor
 			listatemp.append(valor)
 			salida[indice] = listatemp
-	return salida
+		
+	resul = filtrarResultados(salida)
+	
+	for key in resul.keys():
+		# print resul[key]
+		# centro = [ ((centros[key][0][0] + centros[key][1][0]) / 2) , ((centros[key][1][0] + centros[key][1][1]) / 2)]
+		if (resul[key][0][0] > centros[key][0] and resul[key][1][0] > centros[key][0]) or (resul[key][0][0] < centros[key][0] and resul[key][1][0] < centros[key][0]):
+			del resul[key]
+			
+			
+	return resul
 	
 def generaCapaPerpendicular(inputlines):
 	polilineas = []
@@ -160,10 +180,10 @@ def generaCapaPerpendicular(inputlines):
 def filtrarResultados(mapa):
 	temp = {}
 	temp = mapa
+	puntosMedios = {}
 	for key in list(mapa):
 		if len(temp[key]) < 2 or len(temp[key]) > 2:
-			del temp[key]
-		
+			del temp[key]			
 	return temp
 
 def calcularDistancias(x1,y1,x2,y2):
@@ -220,10 +240,16 @@ except:
 
 
 arcpy.MultipartToSinglepart_management(salidapuntos,unipuntos)
-arcpy.Delete_management(testlinea)
-arcpy.Delete_management(salidapuntos)
+
+if arcpy.Exists(salidapuntos):
+	arcpy.Delete_management(salidapuntos)
 conjunto = intersectar(unipuntos)
-fin = filtrarResultados(conjunto)
-salida = crearLineas(fin)
-arcpy.Delete_management(testpuntos)
+# fin = filtrarResultados(conjunto)
+salida = crearLineas(conjunto)
+if arcpy.Exists(testpuntos):
+	arcpy.Delete_management(testpuntos)
+if arcpy.Exists(unipuntos):
+	arcpy.Delete_management(unipuntos)
+if arcpy.Exists(testlinea):
+	arcpy.Delete_management(testlinea)
 del gp
