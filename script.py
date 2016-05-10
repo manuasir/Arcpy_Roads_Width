@@ -20,15 +20,15 @@ inputlines = ''
 
 # Modificar distancia de lineas perpendiculares
 
-distance = 600.0
+distance = 30.0
 
 # Variables globales
 
-arcpy.env.workspace = r"C:\..."
-testlinea = r"C:\...\perpendiculares.shp"
-testpuntos = r"C:\...\testpuntos.shp"
-unipuntos = testpuntos = r"C:\...\unipuntos.shp"
-salidapuntos = r"C:\...\puntos_intersect.shp"
+arcpy.env.workspace = r"C:\.."
+testlinea = r"C:\..\perpendiculares.shp"
+testpuntos = r"C:\..\testpuntos.shp"
+unipuntos = r"C:\..\unipuntos.shp"
+salidapuntos = r"C:\..\puntos_intersect.shp"
 
 if arcpy.Exists(testlinea):
 	arcpy.Delete_management(testlinea)
@@ -179,9 +179,11 @@ def crearLineas(struct):
 	point = arcpy.Point()
 	array = arcpy.Array()
 	featureList = []
-	arcpy.CreateFeatureclass_management("C:/USERS/NATALIA/DESKTOP/temp" , "lineasbuenas.shp", "POLYLINE")
-	arcpy.AddField_management(r"C:/USERS/NATALIA/DESKTOP/temp/lineasbuenas.shp", "Distancia", "LONG", 9)
-	cursor = arcpy.InsertCursor(r"C:\USERS\NATALIA\DESKTOP\temp\lineasbuenas.shp")
+	nombreSalida = inputlines + "_perpendiculares.shp"
+	rutaSalida = "C:/USERS/NATALIA/DESKTOP/temp/"+nombreSalida
+	arcpy.CreateFeatureclass_management("C:/USERS/NATALIA/DESKTOP/temp" , nombreSalida, "POLYLINE")
+	arcpy.AddField_management(r"C:/USERS/NATALIA/DESKTOP/temp/"+nombreSalida, "Distancia", "LONG", 9)
+	cursor = arcpy.InsertCursor(rutaSalida)
 	feat = cursor.newRow()
 	# cur = arcpy.UpdateCursor(r)
 	for key in list(struct):
@@ -218,10 +220,10 @@ except:
 
 
 arcpy.MultipartToSinglepart_management(salidapuntos,unipuntos)
-# arcpy.Delete_management(testlinea)
+arcpy.Delete_management(testlinea)
 arcpy.Delete_management(salidapuntos)
 conjunto = intersectar(unipuntos)
 fin = filtrarResultados(conjunto)
 salida = crearLineas(fin)
-# arcpy.Delete_management(testpuntos)
+arcpy.Delete_management(testpuntos)
 del gp
