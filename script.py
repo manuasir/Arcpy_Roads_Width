@@ -15,6 +15,8 @@ gp = arcgisscripting.create()
 # tempo: ruta de capa de polígonos (POLYGON)
 # inputlines: ruta de capa de líneas (POLYLINE)
 
+tempo = ''
+inputlines = ''
 
 # Modificar distancia de lineas perpendiculares
 
@@ -144,7 +146,7 @@ def intersectar(puntos):
 	for key in resul.keys():
 		# print resul[key]
 		# centro = [ ((centros[key][0][0] + centros[key][1][0]) / 2) , ((centros[key][1][0] + centros[key][1][1]) / 2)]
-		if (resul[key][0][0] > centros[key][0] and resul[key][1][0] > centros[key][0]) or (resul[key][0][0] < centros[key][0] and resul[key][1][0] < centros[key][0]):
+		if (((resul[key][0][0] > centros[key][0] and resul[key][1][0] > centros[key][0]) or (resul[key][0][0] < centros[key][0] and resul[key][1][0] < centros[key][0])) or ((resul[key][0][1] > centros[key][1] and resul[key][1][1] > centros[key][1]) or (resul[key][0][1] < centros[key][1] and resul[key][1][1] < centros[key][1]))):
 			del resul[key]
 			
 			
