@@ -15,12 +15,10 @@ gp = arcgisscripting.create()
 # tempo: ruta de capa de polígonos (POLYGON)
 # inputlines: ruta de capa de líneas (POLYLINE)
 
-tempo = ''
-inputlines = ''
 
 # Modificar distancia de lineas perpendiculares
 
-distance = 30.0
+distance = 30
 
 # Variables globales
 
@@ -45,13 +43,11 @@ def crearPerpendicular(feat):
 	starty = float(lpy)
 	endx = float(fpx)
 	endy = float(fpy)
-	# midx = float((startx+endx)/2)
-	# midy = float((starty+endy)/2)
 	midx = float(mpx)
 	midy = float(mpy)
 
 	ptList =[[midx,midy]]
-	#if the line is horizontal or vertical the slope and negreciprocal will fail so do this instead.
+	#Si la linea es horizontal o vertical, se aplica la siguiente operacion:
 	
 	if starty==endy or startx==endx:
 		if starty == endy:
@@ -68,10 +64,10 @@ def crearPerpendicular(feat):
             
 	else:
         
-            #get the slope of the line
+            #obtener la inclinación de la linea
 		m = ((starty - endy)/(startx - endx))
             
-            #get the negative reciprocal, 
+            #obtener el negativo reciproco
 		negativereciprocal = -1*((startx - endx)/(starty - endy))
             
 		if m > 0:
@@ -122,14 +118,12 @@ def intersectar(puntos):
 		indice = linea[0]
 		x = linea[2]
 		fpx = x.positionAlongLine(0.5,True).firstPoint.X
-		fpy = x.positionAlongLine(0.5,True).firstPoint.Y
-		
+		fpy = x.positionAlongLine(0.5,True).firstPoint.Y		
 		centros[indice] = [fpx,fpy]
-		# print centros
+
 	
 	for tupla in cursorpuntos:
 		listatemp = []
-		# print "contador dos {}".format(tupla[0])
 		indice = tupla[0] 
 		valor = tupla[1]
 		if indice in salida:
@@ -137,15 +131,12 @@ def intersectar(puntos):
 			listatemp.append(valor)
 			salida[indice] = listatemp	
 		else:
-			# salida[indice] = valor
 			listatemp.append(valor)
 			salida[indice] = listatemp
 		
 	resul = filtrarResultados(salida)
 	
 	for key in resul.keys():
-		# print resul[key]
-		# centro = [ ((centros[key][0][0] + centros[key][1][0]) / 2) , ((centros[key][1][0] + centros[key][1][1]) / 2)]
 		if (((resul[key][0][0] > centros[key][0] and resul[key][1][0] > centros[key][0]) or (resul[key][0][0] < centros[key][0] and resul[key][1][0] < centros[key][0])) or ((resul[key][0][1] > centros[key][1] and resul[key][1][1] > centros[key][1]) or (resul[key][0][1] < centros[key][1] and resul[key][1][1] < centros[key][1]))):
 			del resul[key]
 			
@@ -182,11 +173,6 @@ def filtrarResultados(mapa):
 	return temp
 
 def calcularDistancias(x1,y1,x2,y2):
-
-	# x1 = struct[key][0][0]
-	# y1 = struct[key][0][1]
-	# x2 = struct[key][1][0]
-	# y2 = struct[key][1][1]
 	temp = math.sqrt( ((x2-x1)**2) + ((y2 - y1)**2))
 	return temp
 				
@@ -238,7 +224,6 @@ arcpy.MultipartToSinglepart_management(salidapuntos,unipuntos)
 if arcpy.Exists(salidapuntos):
 	arcpy.Delete_management(salidapuntos)
 conjunto = intersectar(unipuntos)
-# fin = filtrarResultados(conjunto)
 salida = crearLineas(conjunto)
 if arcpy.Exists(testpuntos):
 	arcpy.Delete_management(testpuntos)
