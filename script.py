@@ -15,13 +15,20 @@ gp = arcgisscripting.create()
 # tempo: ruta de capa de polígonos (POLYGON)
 # inputlines: ruta de capa de líneas (POLYLINE)
 
+tempo = ''
+inputlines = ''
 
 # Modificar distancia de lineas perpendiculares
 
-distance = 30
+distance = 20
 
 # Variables globales
 
+arcpy.env.workspace = r"C:\USERS\NATALIA\DESKTOP"
+testlinea = r"C:\USERS\NATALIA\DESKTOP\temp\perpendiculares.shp"
+testpuntos = r"C:\USERS\NATALIA\DESKTOP\temp\testpuntos.shp"
+unipuntos = r"C:\USERS\NATALIA\DESKTOP\temp\unipuntos.shp"
+salidapuntos = r"C:\USERS\NATALIA\DESKTOP\temp\puntos_intersect.shp"
 
 if arcpy.Exists(testlinea):
 	arcpy.Delete_management(testlinea)
