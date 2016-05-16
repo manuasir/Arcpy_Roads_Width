@@ -24,11 +24,11 @@ distance = 20
 
 # Variables globales
 
-arcpy.env.workspace = r"C:\USERS\NATALIA\DESKTOP"
-testlinea = r"C:\USERS\NATALIA\DESKTOP\temp\perpendiculares.shp"
-testpuntos = r"C:\USERS\NATALIA\DESKTOP\temp\testpuntos.shp"
-unipuntos = r"C:\USERS\NATALIA\DESKTOP\temp\unipuntos.shp"
-salidapuntos = r"C:\USERS\NATALIA\DESKTOP\temp\puntos_intersect.shp"
+arcpy.env.workspace = r"C:\.."
+testlinea = r"C:\..\perpendiculares.shp"
+testpuntos = r"C:\..\testpuntos.shp"
+unipuntos = r"C:\..\unipuntos.shp"
+salidapuntos = r"C:\..\puntos_intersect.shp"
 
 if arcpy.Exists(testlinea):
 	arcpy.Delete_management(testlinea)
